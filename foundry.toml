@@ -4,7 +4,7 @@ out = "out"
 libs = ["lib"]
 fs_permissions = [
     { access = "read", path = "./broadcast" },
-    { access = "read", path = "./reports" },
+    { access = "read", path = "./img/" },
 ]
 
 remappings = [

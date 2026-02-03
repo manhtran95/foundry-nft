@@ -55,8 +55,10 @@ contract MoodNft is ERC721 {
         sTokenCounter++;
     }
 
-    function flopMood(uint256 tokenId) public {
-        if (getApproved(tokenId) != msg.sender && ownerOf(tokenId) != msg.sender) {
+    function flipMood(uint256 tokenId) public {
+        if (
+            getApproved(tokenId) != msg.sender && ownerOf(tokenId) != msg.sender
+        ) {
             revert MoodNft__CantFlipMoodIfNotOwner();
         }
         if (sTokenIdToMood[tokenId] == Mood.HAPPY) {
@@ -70,7 +72,9 @@ contract MoodNft is ERC721 {
         return "data:application/json;base64,";
     }
 
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    function tokenURI(
+        uint256 tokenId
+    ) public view override returns (string memory) {
         string memory imageUri;
         if (sTokenIdToMood[tokenId] == Mood.HAPPY) {
             imageUri = sHappySvgImageUri;
@@ -78,14 +82,25 @@ contract MoodNft is ERC721 {
             imageUri = sSadSvgImageUri;
         }
 
-        return string(
-            abi.encodePacked(
-                _baseURI(),
-                Base64.encode(
-                    abi.encodePacked('{"name": "', name(), '", "description": "A mood NFT", "attributes": [{"trait_type": "Mood", "value": 100}], "image": "', imageUri, '"}')
+        return
+            string(
+                abi.encodePacked(
+                    _baseURI(),
+                    Base64.encode(
+                        abi.encodePacked(
+                            '{"name":"',
+                            name(), // You can add whatever name here
+                            '", "description":"An NFT that reflects the mood of the owner, 100% on Chain!", ',
+                            '"attributes": [{"trait_type": "moodiness", "value": 100}], "image":"',
+                            imageUri,
+                            '"}'
+                        )
+                    )
                 )
-            )
-        );
+            );
+    }
 
+    function getTokenCounter() public view returns (uint256) {
+        return sTokenCounter;
     }
 }
